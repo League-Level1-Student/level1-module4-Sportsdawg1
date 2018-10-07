@@ -6,6 +6,7 @@
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.MouseInfo;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -18,7 +19,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 public class MagicBox extends JPanel implements Runnable, MouseListener {
-
+	static double mouseX;
+	static double mouseY;
 	/*
 	 * We are going to hide secrets within the magic box. 
 	 * When the user clicks on a secret place, stuff will happen.
@@ -34,7 +36,9 @@ public class MagicBox extends JPanel implements Runnable, MouseListener {
 
 	public static void main(String[] args) throws Exception {
 		SwingUtilities.invokeLater(new MagicBox());
-	
+		
+		
+		
 		
 		
 	}
@@ -53,6 +57,7 @@ public class MagicBox extends JPanel implements Runnable, MouseListener {
 		JFrame frame = new JFrame("The Magic Box contains many secrets...");
 		frame.add(this);
 		setPreferredSize(new Dimension(backgroundImage.getWidth(), backgroundImage.getHeight()));
+		frame.addMouseListener(this);
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
@@ -81,7 +86,13 @@ public class MagicBox extends JPanel implements Runnable, MouseListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+		int x = e.getX();
+		int y = e.getY();
+		System.out.println(x + " " + y);
+		if (x > 300 && x < 340 && y > 400 && y < 600) {
+			speak("you clicked on the area");
+			System.out.println("clicked");
+		}
 	}
 
 	@Override
@@ -100,6 +111,13 @@ public class MagicBox extends JPanel implements Runnable, MouseListener {
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+	static void speak(String words) {
+		try {
+			Runtime.getRuntime().exec("say " + words).waitFor();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
